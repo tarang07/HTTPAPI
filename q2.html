@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTTP Assignment 2</title>
+	<script type="text/javascript" src=https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js></script>
+	<script src="https://code.angularjs.org/1.5.7/angular-route.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<style>
+    p{
+      margin: 10px 0 3px;
+    }
+	</style>
+	<script type="text/javascript">
+	var mod = angular.module("Myapp" ,[]);
+	mod.controller("myctrl" , function($scope,$cacheFactory){
+		 $scope.keys = [];
+    $scope.cache = $cacheFactory('cacheId');
+    $scope.put = function(key, value) {
+      if (angular.isUndefined($scope.cache.get(key))) {
+      	$scope.cache.put(key,value);
+        $scope.keys.push(key);
+      }
+	$scope.remove = function(removeKey){
+          $scope.cache.remove(removeKey);
+        } 
+      $scope.removeAll = function(){
+          $scope.cache.removeAll();
+        } 
+      $scope.destroy = function(){
+          $scope.cache.destroy();
+        }
+    }
+  });
+	</script>
+</head>
+<body ng-app="Myapp">
+  <div ng-controller="myctrl" class="container">
+  <input ng-model="newCacheKey" placeholder="Key">
+  <input ng-model="newCacheValue" placeholder="Value">
+  <button ng-click="put(newCacheKey, newCacheValue)">Cache</button>
+  <p ng-if="keys.length">Cached Values</p>
+  <div ng-repeat="key in keys">
+    <span ng-bind="key"></span>
+    <span>: </span>
+    <b ng-bind="cache.get(key)"></b>
+  </div>
+  <p>Cache Info</p>
+  <div ng-repeat="(key, value) in cache.info()">
+    <span ng-bind="key"></span>
+    <span>: </span>
+    <b ng-bind="value"></b>
+  </div>
+  <p>REMOVE AND DESTROY </p>
+  <input ng-model="removeKey" placeholder="Value">
+  <button ng-click="remove(removeKey)">REMOVE</button>
+  <br><br>
+  <button ng-click="removeAll()">REMOVE ALL</button>
+  <br><br>
+  <button ng-click="destroy()">DESTROY</button>
+</div>
+</body>
+</html>
